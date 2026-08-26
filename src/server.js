@@ -1,20 +1,20 @@
-const app = require('./app')
+const app = require("./app");
+const connectDB = require("./config/db");
 require("dotenv").config();
-const connectDB=require("./config/db");
-const PORT=process.env.PORT;
+const PORT =process.env.PORT;
 
-
-const start = async () => {
+const start = async()=>{
     try {
         await connectDB();
+         const server = app.listen(process.env.PORT,()=>{
+        console.log(`server is listening on port  ${process.env.PORT}`);
 
-        const server = app.listen(PORT, () => {
-            console.log(`Server starts on port ${PORT}`);
-        });
-    } catch (err) {
-        console.log("database connection failed", err.message);
-        process.exit(1);
-    }
+    });
+    } catch (error) {
+        console.log("database connection failed",error.message);
+        
+    };
+   
 };
 
 start();
