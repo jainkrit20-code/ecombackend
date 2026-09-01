@@ -5,6 +5,7 @@ const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const VIDEO_TYPES = ['video/mp4'];
 
 const fileFilter = (_req, file, cb) => {
+  console.log("Received file:", file.originalname, file.mimetype); 
   if ([...IMAGE_TYPES, ...VIDEO_TYPES].includes(file.mimetype)) return cb(null, true);
   cb(apiError(400, 'Only jpeg, png, webp or mp4 files are allowed'));
 };

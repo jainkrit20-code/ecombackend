@@ -1,36 +1,42 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
+const convertToSlug = require("../utils/slug");
 
 const brandSchema = new mongoose.Schema(
-    {
-        name: {
-            type: String,
-            required: true,
-            unique: true,
-            trim: true
-        },
-
-        slug: {
-            type: String,
-            required: true,
-            unique: true,
-            index: true
-        },
-
-        logo: {
-            url: String,
-            publicId: String
-        },
-
-        isActive: {
-            type: Boolean,
-            default: true
-        }
+  {
+    name: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
     },
-    {
-        timestamps: true
-    }
+
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
+    },
+
+    logo: {
+      url: String,
+      publicId: String,
+    },
+
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  {
+    timestamps: true,
+  },
 );
+
+brandSchema.pre("validate", function setSlug() {
+  if (this.isModified("name") || !this.slug)
+    this.slug = convertToSlug(this.name);
+});
 
 const Brand = mongoose.model("Brand", brandSchema);
 
-export default Brand;
+module.exports = Brand;

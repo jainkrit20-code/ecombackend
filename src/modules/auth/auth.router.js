@@ -6,6 +6,8 @@ const { authController } = require("./auth.controller");
 
 const validate = require("../../middlewares/validate.middleware");
 
+
+
 const {
   registerSchema,
   loginSchema,

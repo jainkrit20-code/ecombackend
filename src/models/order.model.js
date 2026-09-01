@@ -1,135 +1,128 @@
 import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema({
-    orderNumber: {
-        type: String,
-        unique: true
-    },
+  orderNumber: {
+    type: String,
+    unique: true,
+  },
 
-    user: {
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+    index: true,
+  },
+
+  items: [
+    {
+      product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+        required: true,
+      },
+
+      seller: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,
-        index: true
-    },
+        index: true,
+      },
 
-    items: [
-        {
-            product: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Product",
-                required: true
-            },
+      title: String,
 
-            seller: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "User",
-                required: true,
-                index: true
-            },
+      image: String,
 
-            title: String,
+      price: {
+        type: Number,
+        required: true,
+      },
 
-            image: String,
+      qty: {
+        type: Number,
+        required: true,
+        min: 1,
+      },
 
-            price: {
-                type: Number,
-                required: true
-            },
-
-            qty: {
-                type: Number,
-                required: true,
-                min: 1
-            },
-
-            status: {
-                type: String,
-                enum: [
-                    "placed",
-                    "confirmed",
-                    "shipped",
-                    "delivered",
-                    "cancelled",
-                    "returned"
-                ],
-                default: "placed"
-            },
-
-            deliveredAt: Date,
-
-            returnRequested: {
-                type: Boolean,
-                default: false
-            }
-        }
-    ],
-
-    shippingAddress: {
-        fullName: String,
-        phone: String,
-        line1: String,
-        line2: String,
-        city: String,
-        state: String,
-        pincode: String
-    },
-
-    amount: {
-        itemsTotal: Number,
-        shipping: Number,
-        total: Number
-    },
-
-    payment: {
-        method: {
-            type: String,
-            enum: ["cod", "razorpay"],
-            required: true
-        },
-
-        status: {
-            type: String,
-            enum: ["pending", "paid", "failed"],
-            default: "pending"
-        },
-
-        razorpayOrderId: String,
-        razorpayPaymentId: String,
-        razorpaySignature: String,
-
-        paidAt: Date
-    },
-
-    orderStatus: {
+      status: {
         type: String,
         enum: [
-            "pending_payment",
-            "confirmed",
-            "completed",
-            "cancelled"
+          "placed",
+          "confirmed",
+          "shipped",
+          "delivered",
+          "cancelled",
+          "returned",
         ],
-        default: "confirmed",
-        index: true
+        default: "placed",
+      },
+
+      deliveredAt: Date,
+
+      returnRequested: {
+        type: Boolean,
+        default: false,
+      },
+    },
+  ],
+
+  shippingAddress: {
+    fullName: String,
+    phone: String,
+    line1: String,
+    line2: String,
+    city: String,
+    state: String,
+    pincode: String,
+  },
+
+  amount: {
+    itemsTotal: Number,
+    shipping: Number,
+    total: Number,
+  },
+
+  payment: {
+    method: {
+      type: String,
+      enum: ["cod", "razorpay"],
+      required: true,
     },
 
-    placedAt: {
-        type: Date,
-        default: Date.now
-    }
-});
+    status: {
+      type: String,
+      enum: ["pending", "paid", "failed"],
+      default: "pending",
+    },
 
+    razorpayOrderId: String,
+    razorpayPaymentId: String,
+    razorpaySignature: String,
+
+    paidAt: Date,
+  },
+
+  orderStatus: {
+    type: String,
+    enum: ["pending_payment", "confirmed", "completed", "cancelled"],
+    default: "confirmed",
+    index: true,
+  },
+
+  placedAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
 orderSchema.index({
-    user: 1,
-    createdAt: -1
+  user: 1,
+  createdAt: -1,
 });
 
 orderSchema.index({
-    "items.seller": 1,
-    createdAt: -1
+  "items.seller": 1,
+  createdAt: -1,
 });
-
 
 const Order = mongoose.model("Order", orderSchema);
 
