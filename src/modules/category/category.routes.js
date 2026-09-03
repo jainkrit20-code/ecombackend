@@ -10,6 +10,7 @@ const loadResource = require("../../middlewares/losdResource.middleware");
 
 const Category = require("../../models/category.model");
 
+
 const {
   createCategoryValidator,
   updateCategoryValidator,

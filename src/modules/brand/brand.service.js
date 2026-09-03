@@ -19,7 +19,8 @@ const getAllBrandsService = async () => {
 
 // Create brand
 const createBrandService = async (payload, file) => {
-  const slug = convertToSlug(payload.name);
+  const name = payload.name?.trim();
+  const slug = convertToSlug(name);
 
   const isExist = await BrandModel.findOne({
     slug,
@@ -32,10 +33,7 @@ const createBrandService = async (payload, file) => {
   payload.slug = slug;
 
   if (file) {
-    const image = await uploadToCloudinary(
-      file.buffer,
-      "ecom/brand"
-    );
+    const image = await uploadToCloudinary(file.buffer, "ecom/brand");
 
     payload.logo = image;
   }
@@ -79,10 +77,7 @@ const updateBrandService = async (brand, payload, file) => {
       await destroyFromCloudinary(brand.logo.publicId);
     }
 
-    const image = await uploadToCloudinary(
-      file.buffer,
-      "ecom/brand"
-    );
+    const image = await uploadToCloudinary(file.buffer, "ecom/brand");
 
     brand.logo = image;
   }

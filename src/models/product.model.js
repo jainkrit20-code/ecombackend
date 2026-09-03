@@ -1,3 +1,4 @@
+
 const mongoose = require("mongoose");
 
 const slugify = require("slugify");
@@ -130,16 +131,16 @@ productSchema.virtual("inStock").get(function () {
 });
 
 
-productSchema.pre("validate", function () {
-    this.slug =
-        `${slugify(this.title, {
-            lower: true,
-            strict: true
-        })}-${nanoid(6)}`;
+productSchema.pre("validate", function (next) {
+  if (this.isNew || this.isModified("title")) {
+    this.slug = `${slugify(this.title, { lower: true, strict: true })}-${nanoid(6)}`;
+  }
 
-    if (this.price > this.mrp) {
-        throw new Error("Price cannot exceed MRP");
-    }
+  if (this.price > this.mrp) {
+    return next(new Error("Price cannot exceed MRP"));
+  }
+
+  next();
 });
 
 

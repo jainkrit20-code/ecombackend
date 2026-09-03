@@ -1,4 +1,4 @@
-const userModel = require("../../models/auth.model");
+
 const UserModel = require("../../models/auth.model");
 const apiError = require("../../utils/apiError");
 const { uploadToCloudinary } = require("../../utils/upploadToCloudinary");
